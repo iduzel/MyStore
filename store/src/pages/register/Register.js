@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 export default function Register() {
-  // These 3 states are only placeholder PLACEHOLDER state
+  // These 4 states are only placeholder PLACEHOLDER state
   const [userPH, setUserPH] = useState(`  Username`);
   const [emailPH, setEmailPH] = useState(`  Email`);
   const [passwordPH, setPaswordPH] = useState("  Password");
@@ -13,9 +13,9 @@ export default function Register() {
   const [confirm, setConfirm] = useState("");
 
   const [data, setData] = useState({
-    usernameS: "",
-    emailS: "",
-    passwordS: "",
+    username: "",
+    email: "",
+    password: "",
   });
 
   console.log("data is: ", data);
@@ -32,12 +32,12 @@ export default function Register() {
     console.log("handleSubmit");
     console.log("data2 is: ", data);
 
-    if (!data.usernameS || !data.emailS || !data.passwordS) return;
+    if (!data.username || !data.email || !data.password) return console.log('EMPTY REGISTER');
 
     const response = await axios.post("/users/register", data);
     console.log("response is ", response);
 
-    setData({ usernameS: "", emailS: "", passwordS: "" });
+    setData({ username: "", email: "", password: "" });
     setConfirm("");
   };
 
@@ -57,8 +57,8 @@ export default function Register() {
           </div>
           <h3 className="title">SIGN UP</h3>
           <input
-            value={data.usernameS}
-            onChange={(e) => setData({ ...data, usernameS: e.target.value })}
+            value={data.username}
+            onChange={(e) => setData({ ...data, username: e.target.value })}
             className="input input-user"
             type="text"
             placeholder={userPH}
@@ -66,8 +66,8 @@ export default function Register() {
             onBlur={() => setUserPH("  Username")}
           />
           <input
-            value={data.emailS}
-            onChange={(e) => setData({ ...data, emailS: e.target.value })}
+            value={data.email}
+            onChange={(e) => setData({ ...data, email: e.target.value })}
             className="input input-email"
             type="email"
             placeholder={emailPH}
@@ -75,8 +75,8 @@ export default function Register() {
             onBlur={() => setEmailPH("  Email")}
           />
           <input
-            value={data.passwordS}
-            onChange={(e) => setData({ ...data, passwordS: e.target.value })}
+            value={data.password}
+            onChange={(e) => setData({ ...data, password: e.target.value })}
             className="input input-pass"
             type="password"
             placeholder={passwordPH}
