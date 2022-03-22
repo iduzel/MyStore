@@ -1,16 +1,44 @@
 import React, { useState } from "react";
 import "./Register.scss";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export default function Register() {
+  // These 3 states are only placeholder PLACEHOLDER state
   const [userPH, setUserPH] = useState(`  Username`);
   const [emailPH, setEmailPH] = useState(`  Email`);
-  const [passwordPH, setPaswrdPH] = useState("  Password");
+  const [passwordPH, setPaswordPH] = useState("  Password");
+  const [confirmPH, setConfirmPH] = useState("  Confirm Password");
+
+  const [confirm, setConfirm] = useState("");
+
+  const [data, setData] = useState({
+    usernameS: "",
+    emailS: "",
+    passwordS: "",
+  });
+
+  console.log("data is: ", data);
 
   const navigate = useNavigate();
 
   const handleNaviSignIn = () => {
     navigate("/login");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log("handleSubmit");
+    console.log("data2 is: ", data);
+
+    if (!data.usernameS || !data.emailS || !data.passwordS) return;
+
+    const response = await axios.post("/users/register", data);
+    console.log("response is ", response);
+
+    setData({ usernameS: "", emailS: "", passwordS: "" });
+    setConfirm("");
   };
 
   return (
@@ -19,7 +47,7 @@ export default function Register() {
 
       <div className="register-main">
         <div className="side"></div>
-        <form className="form">
+        <form onSubmit={(e) => handleSubmit(e)} className="form">
           <div className="logo">
             <img
               className="logo-image"
@@ -29,6 +57,8 @@ export default function Register() {
           </div>
           <h3 className="title">SIGN UP</h3>
           <input
+            value={data.usernameS}
+            onChange={(e) => setData({ ...data, usernameS: e.target.value })}
             className="input input-user"
             type="text"
             placeholder={userPH}
@@ -36,30 +66,36 @@ export default function Register() {
             onBlur={() => setUserPH("  Username")}
           />
           <input
+            value={data.emailS}
+            onChange={(e) => setData({ ...data, emailS: e.target.value })}
             className="input input-email"
-            type="text"
+            type="email"
             placeholder={emailPH}
             onFocus={() => setEmailPH("")}
             onBlur={() => setEmailPH("  Email")}
           />
           <input
+            value={data.passwordS}
+            onChange={(e) => setData({ ...data, passwordS: e.target.value })}
             className="input input-pass"
-            type="text"
+            type="password"
             placeholder={passwordPH}
-            onFocus={() => setPaswrdPH("")}
-            onBlur={() => setPaswrdPH("  Password")}
+            onFocus={() => setPaswordPH("")}
+            onBlur={() => setPaswordPH("  Password")}
           />
           <input
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
             className="input input-pass"
-            type="text"
-            placeholder="  Confirm Password"
-            /* onFocus={() => setPaswrdPH("")}
-            onBlur={() => setPaswrdPH("  Password")} */
+            type="password"
+            placeholder={confirmPH}
+            onFocus={() => setConfirmPH("")}
+            onBlur={() => setConfirmPH("  Confirm Password")}
           />
           <div className="checkbox-div">
             <input
               className=" input-checkbox"
-              for="check-remember"
+              htmlFor="check-remember"
               type="checkbox"
             />
             <label className="checkbox-label" id="check-remember">
