@@ -19,9 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  age: { type: Number },
-  address: { type: String },
-  image: { type: String },
+  ageS: { type: Number },
+  addressS: { type: String },
+  imageS: { type: String },
 });
 
 module.exports = mongoose.model("UserS", userSchema);
