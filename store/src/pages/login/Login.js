@@ -17,7 +17,8 @@ export default function Login() {
     password: "",
   });
 
-  const dataContext = useContext(DataContext)
+  const {userData, setUserData} = useContext(DataContext)
+
 
   const handleNaviSignUp = () => {
     navigate("/register");
@@ -26,12 +27,15 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     console.log('handlelogin')
+
     if (!data.password) return;
     const response = await axios.post("/users/login", data);
     console.log('response is: ', response)
+    
     if (response.data.success) {
       console.log('login client side data SUCCESS')
-      dataContext.setUserData({...response.data.user})
+      console.log('response.data.user: ', response.data.user)
+      setUserData({...response.data.user})
       navigate('/home')
     }
   };

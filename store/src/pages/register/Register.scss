@@ -1,6 +1,5 @@
 @import "../../index.scss";
 
-
 .register {
   .bg-img {
     background: url("https://t3.ftcdn.net/jpg/01/22/71/96/360_F_122719641_V0yw2cAOrfxsON3HeWi2Sf4iVxhv27QO.jpg")
@@ -69,7 +68,7 @@
       }
 
       .checkbox-div {
-        @include flex-center(flex, row,  flex-start, center);
+        @include flex-center(flex, row, flex-start, center);
 
         margin-left: 0.8em;
 
@@ -109,7 +108,7 @@
       }
 
       .no-account {
-        margin-top: 0.5rem;
+        margin-top: 3rem;
 
         small {
           span {

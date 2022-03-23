@@ -23,7 +23,7 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
     console.log("user: ", user);
    
-    res.send({ success: true});
+    res.send({ success: true, user});
   } catch (error) {
     console.log("Register Error: ", error.message);
   }
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
 
     if (!passMatch) return res.send({ success: false, errorId: 3 }); 
 
-    res.send({ success: true});
+    res.send({ success: true, user});
   } catch (error) {
     console.log('LOGIN ERROR:', error.message)
     res.send(error.message)
