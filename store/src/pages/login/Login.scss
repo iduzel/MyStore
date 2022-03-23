@@ -1,6 +1,7 @@
 @import "../../index.scss";
 
 .login {
+  position: relative;
   .bg-img {
     background: url("https://t3.ftcdn.net/jpg/01/22/71/96/360_F_122719641_V0yw2cAOrfxsON3HeWi2Sf4iVxhv27QO.jpg")
       no-repeat center fixed;
@@ -12,7 +13,6 @@
 
   .login-main {
     width: 750px;
-
     display: flex;
     position: absolute;
     top: 50%;
@@ -134,5 +134,25 @@
       background-color: black;
       border-radius: 0px 10px 10px 0;
     }
+  }
+}
+
+@media screen and (max-width: 480px) {
+
+  .login-main {
+  
+  border: 5px solid red; 
+  width: 375px;  
+  position: absolute;
+    top: 5%;
+    left: 5%;
+    transform: translate(-50%, -55%);
+  
+  }
+  
+  .side {    
+   
+   
+   
   }
 }
