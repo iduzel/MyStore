@@ -10,15 +10,13 @@ export default function Register() {
   const [passwordPH, setPaswordPH] = useState("  Password");
   const [confirmPH, setConfirmPH] = useState("  Confirm Password");
 
+  // These confirm and data are states to get data from user
   const [confirm, setConfirm] = useState("");
-
   const [data, setData] = useState({
     username: "",
     email: "",
     password: "",
   });
-
-  console.log("data is: ", data);
 
   const navigate = useNavigate();
 
@@ -26,16 +24,17 @@ export default function Register() {
     navigate("/login");
   };
 
+  // SUBMIT REGISTER FORM
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log("handleSubmit");
-    console.log("data2 is: ", data);
 
-    if (!data.username || !data.email || !data.password) return console.log('EMPTY REGISTER');
+    if (!data.username || !data.email || !data.password)
+      return console.log("EMPTY REGISTER");
 
     const response = await axios.post("/users/register", data);
-    console.log("response is ", response);
+    console.log("response REGISTER is ", response);
 
     setData({ username: "", email: "", password: "" });
     setConfirm("");
