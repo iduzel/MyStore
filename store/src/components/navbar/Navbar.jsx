@@ -5,15 +5,21 @@ import "./Navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { DataContext } from "../../pages/context/Context";
+import axios from "axios";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(DataContext);
-  const handleLogout = () => {
-    // clear the context
-    setUserData(null);
-    // redirect user to home
+  const handleLogout = async () => {
 
+    const response = await axios.get('/users/logout')
+
+    if (response.data.success) {
+       // clear the context
+    setUserData(null);
+    }
+   
+    // redirect user to home
     navigate("/login");
     console.log("after logout userDataContext is:", userData);
   };
