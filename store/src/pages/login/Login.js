@@ -52,6 +52,7 @@ export default function Login() {
             />
           </div>
           <h3 className="title">SIGN IN</h3>
+          
           <input
             value={data.username}
             onChange={(e) => setData({ ...data, username: e.target.value })}
@@ -74,7 +75,7 @@ export default function Login() {
             value={data.password}
             onChange={(e) => setData({ ...data, password: e.target.value })}
             className="input input-email"
-            type="text"
+            type="password"
             placeholder={passwordPH}
             onFocus={() => setPaswrdPH("")}
             onBlur={() => setPaswrdPH("  Password")}
