@@ -38,6 +38,7 @@ export default function Register() {
 
     setData({ username: "", email: "", password: "" });
     setConfirm("");
+    navigate('/login')
   };
 
   return (
