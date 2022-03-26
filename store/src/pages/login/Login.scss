@@ -19,6 +19,7 @@
     left: 50%;
     transform: translate(-50%, -55%);
     z-index: 2;
+    border-radius: 10px;
 
     .form {
       position: relative;
@@ -138,21 +139,15 @@
 }
 
 @media screen and (max-width: 480px) {
-
   .login-main {
-  
-  border: 5px solid red; 
-  width: 375px;  
-  position: absolute;
-    top: 5%;
-    left: 5%;
+    border: 5px solid red;
+    width: 375px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -55%);
-  
   }
-  
-  .side {    
-   
-   
-   
+
+  .side {
   }
 }
