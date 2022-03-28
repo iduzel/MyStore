@@ -13,7 +13,8 @@ const Profile = () => {
     lastName: "",
     age: null,
     address: "",
-    number: null,
+    phone: null,
+    birthDate: "",
   });
 
   useEffect(() => {
@@ -60,6 +61,7 @@ const Profile = () => {
 
     navigate("/home");
   };
+
 
   return (
     <div className="profileDiv">
@@ -156,6 +158,21 @@ const Profile = () => {
                 />
                 <label htmlFor="phone" className="form__label">
                   Phone
+                </label>
+              </div>
+
+              <div className="form">
+                <input
+                  type="date"
+                  id="birthDate"
+                  className=" form__input"
+                  onChange={(e) =>
+                    setData({ ...data, birthDate: e.target.value })
+                  }
+                  value={data?.birthDate}
+                />
+                <label htmlFor="birthDate" className="form__label">
+                  Birthdate
                 </label>
               </div>
             </div>

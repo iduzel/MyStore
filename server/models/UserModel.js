@@ -28,7 +28,8 @@ const userSchema = new Schema({
   address: { type: String },
   image: { type: String },
   token: { type: String },
-  phone: { type: Number}
+  phone: { type: Number},
+  birthDate: { type: String},
 });
 
 userSchema.pre("save", function (next) {
