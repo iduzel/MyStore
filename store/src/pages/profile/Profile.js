@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(DataContext);
+  console.log("userDataContext: ", userData);
+
+  // DATA
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +24,36 @@ const Profile = () => {
     setData({ ...data, ...userData });
     setFileUrl(userData.image);
   }, []);
+
+  /*   // actual date
+  const [date, setDate] = useState({
+    actualYear: new Date().getFullYear(),
+    actualMonth: new Date().getMonth() + 1,
+    actualDay: new Date().getDate(),
+  });
+
+  console.log("actual date: ", date);
+
+  const [myDate, setMyDate] = useState({
+    year: Number(userData.birthDate.substring(0, 4)),
+    month: Number(userData.birthDate.substring(5, 7)),
+    day: Number(userData.birthDate.substring(8)),
+  });
+
+  console.log("myDATE", myDate);
+
+  useEffect(() => {
+
+    const getAge = () => {
+
+      const myAge = date.actualYear - myDate.year
+
+      setUserData()
+      return Number(myAge)
+    }
+    getAge()
+  }, [])
+ */
 
   const [fileUrl, setFileUrl] = useState("");
   const [blobFile, setBlobFile] = useState(null);
@@ -62,7 +95,6 @@ const Profile = () => {
     navigate("/home");
   };
 
-
   return (
     <div className="profileDiv">
       <div className="profile container shadow-lg ">
@@ -72,6 +104,7 @@ const Profile = () => {
             {" "}
             <div className="main-div">
               <div className="form">
+                {/* USERNAME */}
                 <input
                   id="username"
                   className="form__input"
@@ -84,6 +117,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* EMAIL */}
                 <input
                   id="email"
                   className="form__input"
@@ -96,6 +130,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* FIRSTNAME */}
                 <input
                   id="firstname"
                   className="form__input"
@@ -110,6 +145,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* LASTNAME */}
                 <input
                   id="lastname"
                   className="form__input"
@@ -123,8 +159,9 @@ const Profile = () => {
                 </label>
               </div>
               <div className="form">
-                {" "}
+                {/* AGE */}{" "}
                 <input
+                  type="number"
                   id="age"
                   className="form__input"
                   onChange={(e) => setData({ ...data, age: e.target.value })}
@@ -136,6 +173,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* ADDRESS */}
                 <input
                   id="address"
                   className=" form__input"
@@ -150,6 +188,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* PHONE */}
                 <input
                   id="phone"
                   className=" form__input"
@@ -162,6 +201,7 @@ const Profile = () => {
               </div>
 
               <div className="form">
+                {/* BIRTHDATE */}
                 <input
                   type="date"
                   id="birthDate"
