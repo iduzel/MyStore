@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const userSchema = new Schema({
   firstName: { type: String },
@@ -20,6 +20,8 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  emailVerified: Boolean,
+  emailVerificationToken: String,
   password: {
     type: String,
     required: true,
@@ -27,9 +29,9 @@ const userSchema = new Schema({
   age: { type: Number },
   address: { type: String },
   image: { type: String },
-  token: { type: String },
-  phone: { type: Number},
-  birthDate: { type: String},
+  token: { type: String }, // access token
+  phone: { type: Number },
+  birthDate: { type: String },
 });
 
 userSchema.pre("save", function (next) {
@@ -54,16 +56,33 @@ userSchema.methods.comparePassword = async (providedPass, dbPass) => {
   return await bcrypt.compare(providedPass, dbPass);
 };
 
-
-userSchema.methods.generateToken = async function() {
-
+userSchema.methods.generateToken = async function (expiration, dbField) {
   const user = this;
 
-  const token = jwt.sign(user._id.toHexString(), process.env.SECRET)
-  user.token = token
+  const token = jwt.sign({id: user._id.toHexString()}, process.env.SECRET, {
+    expiresIn: expiration,
+  });
 
-  await user.save();
+  if (dbField) {
+    user[dbField] = token;
+    await user.save();
+    return user;
+  } else {
 
-  return user
-} 
+    return token
+  }
+};
+
+userSchema.statics.getPayload = async token => {
+
+  try {
+     return jwt.verify(token, process.env.SECRET)
+  } catch (error) {
+    return error.message
+  }
+
+ 
+}
+
+
 module.exports = mongoose.model("User", userSchema);
