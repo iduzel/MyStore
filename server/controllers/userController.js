@@ -42,6 +42,9 @@ router.get("/", (req, res) => {
   console.log("User: ", User);
 });
 
+//EMAIL
+const sendEmail = require('../utils/mail/mail')
+
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
@@ -55,6 +58,12 @@ router.post("/register", async (req, res) => {
     const newUser = new User(req.body);
     console.log("newUser: ", newUser);
     const user = await newUser.save();
+
+    //token
+    const token = await user.generateToken('1d');
+
+    // send an email to the user that just registred
+    sendEmail(user.email, token)
     console.log("user: ", user);
 
     res.send({ success: true, user });
@@ -88,14 +97,14 @@ router.post("/login", async (req, res) => {
 
     if (!passMatch) return res.send({ success: false, errorId: 3 });
 
-    const userWithToken = await user.generateToken();
+    const token = await user.generateToken('1d');
 
     user = user.toObject();
     delete user.pass;
     delete user.token;
 
     res
-      .cookie("cookieStore", userWithToken.token)
+      .cookie("cookieStore", token)
       .send({ success: true, user });
   } catch (error) {
     console.log("LOGIN ERROR:", error.message);
@@ -174,6 +183,35 @@ router.patch('/profilecloudinary', uploadCloudinary.single('image'), async (req,
   } catch (error) {
       
       console.log('Register CLOUDINARY ERROR:', error.message)
+      res.send(error.message)
+  }
+})
+
+// EMAIL CONFIRM
+
+router.get('/emailconfirm/:token', async (req, res) => {
+
+  try {
+
+    const token = req.params.token
+    console.log('token is:', token)
+
+    // find the user with provided id (id is contained inside JWT)
+        // update the user and set emailverified to true
+
+        const payload = await User.getPayload(token)
+        const id = payload.id
+
+        const updatedUser = User.findByIdAndUpdate(id, {emailVerified: true})
+
+        if ( !updatedUser ) return res.send()
+
+      res.send({success: true})
+      
+      
+  } catch (error) {
+      
+      console.log('Email Confirm ERROR:', error.message)
       res.send(error.message)
   }
 })
