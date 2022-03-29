@@ -43,6 +43,8 @@
   .dropdown-content a:hover {
     background-color: #CBE606; 
     border-radius: 5px ;
+   
+    
   }
 
   .dropdown:hover .dropdown-content {
@@ -56,6 +58,13 @@
 
   .dropdown:hover .dropdown-content {
     border-radius: 5px;
+  }
+
+  .navbar-image {
+    width: 30px;
+    height: 30px;
+    margin-left: 1em;
+    border-radius: 50%;
   }
   
 }
