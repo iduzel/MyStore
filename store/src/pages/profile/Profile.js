@@ -3,12 +3,52 @@ import { DataContext } from "../context/Context";
 import "./Profile.scss";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(DataContext);
+
   console.log("userDataContext: ", userData);
+  const [ flag, setFlag ] = useState(false)
+    // actual date
+    const [date, setDate] = useState({
+      actualYear: new Date().getFullYear(),
+      actualMonth: new Date().getMonth() + 1,
+      actualDay: new Date().getDate(),
+    });
+  
+    // user date
+    const [myDate, setMyDate] = useState({
+      year: Number(userData.birthDate.substring(0, 4)),
+      month: Number(userData.birthDate.substring(5, 7)),
+      day: Number(userData.birthDate.substring(8)),
+    });
+  
+
+  const [userAge, setUserAge] = useState(
+    (date.actualMonth > myDate.month) ? date.actualYear - myDate.year 
+    : (date.actualYear - myDate.year)-1
+  );
+
+
+/*   useEffect(() => {
+        if (date.actualMonth > myDate.month) {
+          setUserAge(date.actualYear - myDate.year)
+        } else if ( date.actualMonth < myDate.month) {
+          setUserAge(date.actualYear - myDate.year - 1)
+        }else {
+          if (date.actualDay >= myDate.day) {
+            setUserAge(date.actualYear - myDate.year)
+          }else {
+            setUserAge(date.actualYear - myDate.year - 1)
+          }
+        }
+
+        
+  }, [])  */
+
+  console.log('user age ', userAge)
 
   // DATA
   const [data, setData] = useState({
@@ -21,39 +61,11 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    setData({ ...data, ...userData });
+    setData({ ...data, ...userData, age:userAge });
     setFileUrl(userData.image);
   }, []);
 
-  /*   // actual date
-  const [date, setDate] = useState({
-    actualYear: new Date().getFullYear(),
-    actualMonth: new Date().getMonth() + 1,
-    actualDay: new Date().getDate(),
-  });
 
-  console.log("actual date: ", date);
-
-  const [myDate, setMyDate] = useState({
-    year: Number(userData.birthDate.substring(0, 4)),
-    month: Number(userData.birthDate.substring(5, 7)),
-    day: Number(userData.birthDate.substring(8)),
-  });
-
-  console.log("myDATE", myDate);
-
-  useEffect(() => {
-
-    const getAge = () => {
-
-      const myAge = date.actualYear - myDate.year
-
-      setUserData()
-      return Number(myAge)
-    }
-    getAge()
-  }, [])
- */
 
   const [fileUrl, setFileUrl] = useState("");
   const [blobFile, setBlobFile] = useState(null);
@@ -92,12 +104,64 @@ const Profile = () => {
 
     if (response.data.success) setUserData({ ...response.data.user });
 
-    navigate("/home");
+
+    setFlag(!flag)
+    navigate('/')
+  
   };
 
   return (
-    <div className="profileDiv">
-      <div className="profile container shadow-lg ">
+    <div className="profileDiv ">
+      {/*  SHOW PROFILE */}
+
+      <h1 className="m-5">PROFILE</h1>
+      <div className={(!flag) ? "profile shadow-lg container rounded mt-5 show" : "profile shadow-lg container rounded mt-5 hide"  } >
+
+        <div className="wholeProfile p-5">
+          <div className="profile-texts">
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Name</h6>
+              <h4 className="text-dark">
+                {data.firstName + " " + data.lastName}
+              </h4>
+            </div>
+
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Username</h6>
+              <h4 className="text-dark">{data.username}</h4>
+            </div>
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Email</h6>
+              <h4 className="text-dark">{data.email}</h4>
+            </div>
+
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Phone</h6>
+              <h4 className="text-dark">{data.phone}</h4>
+            </div>
+
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Address</h6>
+              <h4 className="text-dark">{data.address}</h4>
+            </div>
+
+            <div className="single-info shadow-lg rounded">
+              <h6 className="text-danger">Age</h6>
+              <h4 className="text-dark">{data.age}</h4>
+            </div>
+          </div>
+          <div className="profile-image rounded">
+            <img className="rounded" src={data.image} alt="" />
+          </div>
+        </div>
+        <div>
+        <button onClick={() => setFlag(!flag)}  className="btn btn-danger w-100 mb-1">EDIT YOUR PROFILE</button>
+        <Link to="/home" className="btn btn-info w-100">HOMEPAGE</Link>
+        </div>
+      </div>
+
+      {/*  EDIT PROFILE */}
+      <div className={(!flag) ? "profile container shadow-lg hide" : "profile container shadow-lg show" }      >
         <h2>Profile</h2>
         <Row className="">
           <Col className="">
@@ -156,19 +220,6 @@ const Profile = () => {
                 />
                 <label className="form__label" htmlFor="lastname">
                   Last Name
-                </label>
-              </div>
-              <div className="form">
-                {/* AGE */}{" "}
-                <input
-                  type="number"
-                  id="age"
-                  className="form__input"
-                  onChange={(e) => setData({ ...data, age: e.target.value })}
-                  value={data?.age}
-                />
-                <label className="form__label" htmlFor="age">
-                  Age
                 </label>
               </div>
 
