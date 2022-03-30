@@ -30,6 +30,7 @@ const userSchema = new Schema({
   address: { type: String },
   image: { type: String },
   token: { type: String }, // access token
+  resetToken: String, // password change
   phone: { type: Number },
   birthDate: { type: String },
 });
