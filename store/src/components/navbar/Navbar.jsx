@@ -81,6 +81,7 @@ const Navbar = () => {
                       <button className="dropbtn">
                         {" "}
                         {userData.username.toUpperCase()}{" "}
+                        <img className="navbar-image" src={userData.image} alt="" />
                       </button>
 
                       <div className="dropdown-content">
