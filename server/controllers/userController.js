@@ -1,40 +1,37 @@
 const express = require("express");
 const User = require("../models/UserModel");
 const router = express.Router();
-const multer = require('multer')
+const multer = require("multer");
 
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary')
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET
-})
-
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 const storageCloudinary = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'Store',
+    folder: "Store",
     format: async (req, file) => {
+      let extension = "";
 
-        let extension = '';
+      if (file.mimetype.includes("image")) {
+        extension = file.mimetype.slice(6);
 
-        if (file.mimetype.includes('image')) {
-            
-            extension = file.mimetype.slice(6)
-            
-            if (extension === 'jpeg') extension = 'jpg';
-        }
-        
-       return extension
+        if (extension === "jpeg") extension = "jpg";
+      }
 
-    }, 
-    public_id: (req, file) => `${req.body._id}-${Date.now()}-${file.originalname}`,
+      return extension;
+    },
+    public_id: (req, file) =>
+      `${req.body._id}-${Date.now()}-${file.originalname}`,
   },
 });
- 
+
 const uploadCloudinary = multer({ storage: storageCloudinary });
 
 router.get("/", (req, res) => {
@@ -43,7 +40,8 @@ router.get("/", (req, res) => {
 });
 
 //EMAIL
-const sendEmail = require('../utils/mail/mail')
+const sendEmail = require("../utils/mail/mail");
+const sendEmailResetPass = require("../utils/mail/mailResetPass");
 
 // REGISTER
 router.post("/register", async (req, res) => {
@@ -60,10 +58,10 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
 
     //token
-    const token = await user.generateToken('1d');
+    const token = await user.generateToken("1d");
 
     // send an email to the user that just registred
-    sendEmail(user.email, token)
+    sendEmail(user.email, token);
     console.log("user: ", user);
 
     res.send({ success: true, user });
@@ -73,7 +71,6 @@ router.post("/register", async (req, res) => {
 });
 
 // LOGIN
-
 router.post("/login", async (req, res) => {
   try {
     console.log("login req.body: ", req.body);
@@ -97,15 +94,13 @@ router.post("/login", async (req, res) => {
 
     if (!passMatch) return res.send({ success: false, errorId: 3 });
 
-    const token = await user.generateToken('1d');
+    const token = await user.generateToken("1d");
 
     user = user.toObject();
     delete user.pass;
     delete user.token;
 
-    res
-      .cookie("cookieStore", token)
-      .send({ success: true, user });
+    res.cookie("cookieStore", token).send({ success: true, user });
   } catch (error) {
     console.log("LOGIN ERROR:", error.message);
     res.send(error.message);
@@ -113,109 +108,154 @@ router.post("/login", async (req, res) => {
 });
 
 // LOGOUT
-
-router.get('/logout', async (req, res) => {
-
+router.get("/logout", async (req, res) => {
   try {
-
-      res.clearCookie('cookieStore').send({success: true})
-      console.log('logout: user logged out')
-      
+    res.clearCookie("cookieStore").send({ success: true });
+    console.log("logout: user logged out");
   } catch (error) {
-      
-      console.log('Logout ERROR:', error.message)
-      res.send(error.message)
+    console.log("Logout ERROR:", error.message);
+    res.send(error.message);
   }
-})
+});
 
-router.patch('/profile', uploadCloudinary.single('image'), async (req, res) => {
-
+router.patch("/profile", uploadCloudinary.single("image"), async (req, res) => {
   try {
-      
-      console.log('req.body is', req.body)
-      console.log('req.file is', req.file)
+    console.log("req.body is", req.body);
+    console.log("req.file is", req.file);
 
-      const {email, username, _id} = req.body
+    const { email, username, _id } = req.body;
 
-      if (!(email || username)) return res.send({success: false, errorId: 1})
+    if (!(email || username)) return res.send({ success: false, errorId: 1 });
 
-      // req.body.image = req.file.filename
-      if (req.file) req.body.image = req.file.path
+    // req.body.image = req.file.filename
+    if (req.file) req.body.image = req.file.path;
 
-      const user = await User.findByIdAndUpdate(_id, req.body, {new: true}).select('-__v -pass')
+    const user = await User.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    }).select("-__v -pass");
 
-      console.log('Profile: user is', user)
+    console.log("Profile: user is", user);
 
-      if (!user) return res.send({success: false, errorId: 2})
+    if (!user) return res.send({ success: false, errorId: 2 });
 
-      res.send({success: true, user})
+    res.send({ success: true, user });
   } catch (error) {
-      
-      console.log('Register ERROR:', error.message)
-      res.send(error.message)
+    console.log("Register ERROR:", error.message);
+    res.send(error.message);
   }
-})
+});
 
-router.patch('/profilecloudinary', uploadCloudinary.single('image'), async (req, res) => {
+router.patch(
+  "/profilecloudinary",
+  uploadCloudinary.single("image"),
+  async (req, res) => {
+    try {
+      console.log("req.body CLOUDINARY is", req.body);
+      console.log("req.file CLOUDINARY is", req.file);
 
-  try {
-      
-      console.log('req.body CLOUDINARY is', req.body)
-      console.log('req.file CLOUDINARY is', req.file)
+      const { email, username, _id } = req.body;
 
-      const {email, username, _id} = req.body
-
-      if (!(email || username)) return res.send({success: false, errorId: 1})
+      if (!(email || username)) return res.send({ success: false, errorId: 1 });
 
       // const foundUser = await User.findById({_id})
-      // 
+      //
       // update users (field1, field2) set field1 = email and field2 = username
 
-      req.body.image = req.file.path
+      req.body.image = req.file.path;
 
-      const user = await User.findByIdAndUpdate(_id, req.body, {new: true}).select('-__v -pass')
+      const user = await User.findByIdAndUpdate(_id, req.body, {
+        new: true,
+      }).select("-__v -pass");
 
-      console.log('Profile: user CLOUDINARY is', user)
+      console.log("Profile: user CLOUDINARY is", user);
 
-      if (!user) return res.send({success: false, errorId: 2})
+      if (!user) return res.send({ success: false, errorId: 2 });
 
-      res.send({success: true, user})
-  } catch (error) {
-      
-      console.log('Register CLOUDINARY ERROR:', error.message)
-      res.send(error.message)
+      res.send({ success: true, user });
+    } catch (error) {
+      console.log("Register CLOUDINARY ERROR:", error.message);
+      res.send(error.message);
+    }
   }
-})
+);
 
 // EMAIL CONFIRM
-
-router.get('/emailconfirm/:token', async (req, res) => {
-
+router.get("/emailconfirm/:token", async (req, res) => {
   try {
-
-    const token = req.params.token
-    console.log('token is:', token)
+    const token = req.params.token;
+    console.log("token is:", token);
 
     // find the user with provided id (id is contained inside JWT)
-        // update the user and set emailverified to true
+    // update the user and set emailverified to true
 
-        const payload = await User.getPayload(token)
-        const id = payload.id
+    const payload = await User.getPayload(token);
+    const id = payload.id;
 
-        const updatedUser = User.findByIdAndUpdate(id, {emailVerified: true})
+    const updatedUser = User.findByIdAndUpdate(id, { emailVerified: true });
 
-        if ( !updatedUser ) return res.send()
+    if (!updatedUser) return res.send();
 
-      res.send({success: true})
-      
-      
+    res.send({ success: true });
   } catch (error) {
-      
-      console.log('Email Confirm ERROR:', error.message)
-      res.send(error.message)
+    console.log("Email Confirm ERROR:", error.message);
+    res.send(error.message);
   }
-})
+});
 
+//forgot pass
+router.post("/forgotpass", async (req, res) => {
+  try {
+    const email = req.body.email;
+    console.log("email is", email);
 
+    // find user in db
+    const user = await User.findOne({ email: email });
+    console.log("user is", user);
+
+    if (!user) return send({ success: false, errorId: 1 });
+
+    const userWithToken = await user.generateToken("1d", "resetToken");
+
+    console.log("token is ", userWithToken.resetToken);
+
+    if (!userWithToken.resetToken) return send({ success: false, errorId: 2 });
+
+    sendEmailResetPass(user.email, userWithToken.resetToken);
+
+    res.send({ success: true });
+  } catch (error) {
+    console.log("forgot pass ERROR:", error.message);
+    res.send(error.message);
+  }
+});
+
+//change pass
+router.post("/changepass", async (req, res) => {
+  try {
+    const { pass, token } = req.body;
+
+    console.log("body is", req.body);
+
+    // 1. verify the token
+    const verifiedToken = await User.getPayload(token);
+
+    console.log("verified token is", verifiedToken);
+
+    const user = await User.findByIdAndUpdate(verifiedToken.id);
+
+    if (user) {
+      user.password = pass;
+      user.resetToken = "";
+
+      const userSaved = await user.save();
+      console.log("user is ", userSaved);
+    }
+
+    res.send({ success: true });
+  } catch (error) {
+    console.log("change pass ERROR:", error.message);
+    res.send(error.message);
+  }
+});
 
 module.exports = router;
