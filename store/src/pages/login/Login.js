@@ -3,6 +3,7 @@ import "./Login.scss";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { DataContext } from "../context/Context";
+import { Link } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
 
@@ -94,9 +95,9 @@ export default function Login() {
           <button className="login-button" type="submit">
             Sign In
           </button>
-          <div className="forgot">
+          <Link to='/forgotpassword'> <div className="forgot">
             <small>Forgot Password</small>
-          </div>
+          </div></Link>
           <div className="no-account">
             <small>
               Don't have an account ?{" "}
