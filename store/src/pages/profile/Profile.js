@@ -20,35 +20,18 @@ const Profile = () => {
   
     // user date
     const [myDate, setMyDate] = useState({
-      year: Number(userData.birthDate.substring(0, 4)),
-      month: Number(userData.birthDate.substring(5, 7)),
-      day: Number(userData.birthDate.substring(8)),
+      
+      year: (userData.birthDate) ?  Number(userData.birthDate.substring(0, 4)) : null,
+      month: (userData.birthDate) ? Number(userData.birthDate.substring(5, 7)) : null ,
+      day: (userData.birthDate) ? Number(userData.birthDate.substring(8)) : null ,
     });
   
 
   const [userAge, setUserAge] = useState(
-    (date.actualMonth > myDate.month) ? date.actualYear - myDate.year 
+    (date.actualMonth >= myDate.month) ? date.actualYear - myDate.year 
     : (date.actualYear - myDate.year)-1
   );
 
-
-/*   useEffect(() => {
-        if (date.actualMonth > myDate.month) {
-          setUserAge(date.actualYear - myDate.year)
-        } else if ( date.actualMonth < myDate.month) {
-          setUserAge(date.actualYear - myDate.year - 1)
-        }else {
-          if (date.actualDay >= myDate.day) {
-            setUserAge(date.actualYear - myDate.year)
-          }else {
-            setUserAge(date.actualYear - myDate.year - 1)
-          }
-        }
-
-        
-  }, [])  */
-
-  console.log('user age ', userAge)
 
   // DATA
   const [data, setData] = useState({
