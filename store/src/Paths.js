@@ -7,6 +7,9 @@ import Login from './pages/login/Login'
 import Profile from './pages/profile/Profile'
 import Register from './pages/register/Register'
 import EmailConfirm from './components/email/EmailConfirm'
+import ForgotPass from './pages/forgotPass/ForgotPass'
+import ChangePass from './pages/changePass/ChangePass'
+
 
 const Paths = () => {
   return (
@@ -19,6 +22,8 @@ const Paths = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/emailconfirm/:token" element={<EmailConfirm />} />
+        <Route path="/forgotpassword" element={<ForgotPass />} />
+        <Route path="/changepassword/:token" element={<ChangePass />} />
         <Route path="/demo" element={<Demo />} />
         <Route path="/*" element={<Unknown />} />
     </Routes>
