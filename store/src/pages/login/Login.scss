@@ -15,9 +15,8 @@
     width: 750px;
     display: flex;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -55%);
+    top: 20%;
+    left: 20%;
     z-index: 2;
     border-radius: 10px;
 
@@ -99,6 +98,7 @@
 
       small {
         color: #fff;
+        text-decoration: none;
       }
       .forgot small {
         font-size: 0.7em;
@@ -138,16 +138,35 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  .login {
+
+    background-color: red;
+    border: 2px solid blue;
+  }
+
   .login-main {
-    border: 5px solid red;
-    width: 375px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -55%);
+    max-width: 375px;
+    position: absolute;  
+    top: 0%;
+    left: 0%;
+    transform: translate(-20%, 15%);
+    z-index: 2;
+    border-radius: 0px;
+    background-color: rgb(9, 255, 0);
+
+    .form {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  .bg-img {
+    display: none;
   }
 
   .side {
+    display: none;
+    border-radius: 0px;
   }
 }

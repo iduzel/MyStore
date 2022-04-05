@@ -86,11 +86,14 @@ const Navbar = () => {
 
                       <div className="dropdown-content">
                         <Link to="/profile">Profile</Link>
+                        <Link to="/employeeList">Users</Link>
                         <Link onClick={handleLogout} to="/home">
                           Sign Out
                         </Link>
                       </div>
-                      <div></div>
+                      <div>
+
+                      </div>
                     </div>
                   )}
                 </div>
