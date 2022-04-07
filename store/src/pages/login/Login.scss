@@ -100,6 +100,9 @@
         color: #fff;
         text-decoration: none;
       }
+      .forgot {
+        text-decoration: none;
+      }
       .forgot small {
         font-size: 0.7em;
       }
@@ -109,7 +112,7 @@
       }
 
       .no-account {
-        margin-top: 6rem;
+        margin-top: 4rem;
 
         small {
           span {
@@ -138,22 +141,20 @@
   }
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
+@media screen and (min-width: 0px) and (max-width: 992px) {
   .login {
-
     background-color: red;
     border: 2px solid blue;
   }
 
   .login-main {
     max-width: 375px;
-    position: absolute;  
+    position: absolute;
     top: 0%;
     left: 0%;
     transform: translate(-20%, 15%);
     z-index: 2;
     border-radius: 0px;
-    background-color: rgb(9, 255, 0);
 
     .form {
       width: 100%;
@@ -168,5 +169,27 @@
   .side {
     display: none;
     border-radius: 0px;
+  }
+}
+
+.google-login-link {
+  img {
+    height: 40px;
+    text-decoration: none;
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .login {
+    .login-main {
+      top: 0%;
+      left: 0%;
+      transform: translate(10%, 3%);
+      width: 300px;
+
+      .form {
+        width: 100%;
+      }
+    }
   }
 }
