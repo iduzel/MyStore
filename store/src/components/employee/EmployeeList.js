@@ -1,23 +1,54 @@
 import React, { useContext, useEffect, useState } from "react";
-import './Employee.scss'
-import { Button, Form, Modal } from "react-bootstrap";
+import "./Employee.scss";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { DataContext } from "../../pages/context/Context";
+import axios from "axios";
 
 const EmployeeList = () => {
-  const { userData, setUserData, employeeData, setEmployeeData } =
-    useContext(DataContext);
+  const { employeeData, setEmployeeData } = useContext(DataContext);
   const [modalIndex, setModalIndex] = useState();
 
-  const sortedEmployees = employeeData.sort((a, b) =>
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get("/employees/list");
+      console.log("DATA EMP RESPONSE: ", response);
+      setEmployeeData([...response.data]);
+    };
+    getData();
+  }, []);
+
+  const sortedEmployees = employeeData?.sort((a, b) =>
     a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
   );
 
+  const [showAlert, setShowAlert] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  //const handleShowAlert = () => setShowAlert(true)
 
-  const [obj, setObj] = useState({});
+  const handleShowAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+  };
+
+  const [obj, setObj] = useState({
+    name: "",
+    email: "",
+    address: "",
+    phone: null,
+  });
+
+  useEffect(() => {
+    handleClose();
+
+    return () => {
+      handleShowAlert();
+    };
+  }, [employeeData]);
 
   // handle change obj
   const handleChange = (e) => {
@@ -25,19 +56,24 @@ const EmployeeList = () => {
   };
 
   // handle submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmployeeData([...employeeData, obj]);
+    const response = await axios.post("/employees/add", obj);
+
+    setObj({
+      name: "",
+      email: "",
+      address: "",
+      phone: null,
+    });
   };
 
   //handle delete
   const handleDelete = (id) => {
-    // console.log("id: ", id);
-    // console.log("handleDelete Clicked");
     let temp = [...employeeData];
-    // console.log("temp: ", temp);
+
     const idx = temp?.findIndex((item, index) => index === id);
-    // console.log("idx: ", idx);
+
     if (idx > -1) temp.splice(idx, 1);
     setEmployeeData(temp);
   };
@@ -74,15 +110,30 @@ const EmployeeList = () => {
   };
 
   return (
-    <div>
-      <div className="iframe-container m-5"><iframe width="560" height="315" src="https://www.youtube.com/embed/8C8ISYGD0ns" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-      
+    <div className="employeeList container">
+      <div className="video-container mt-3">
+        <iframe
+          
+          src="https://www.youtube.com/embed/8C8ISYGD0ns"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+
       <form onSubmit={handleSubmit} className="formGroup">
-        <input className="w-50 bg-info" type="text" maxLength="5"  />
+        
         <input
           className="form-control w-50"
           placeholder="name"
           name="name"
+          onChange={handleChange}
+        />
+        <input
+          className="form-control w-50"
+          placeholder="email"
+          name="email"
           onChange={handleChange}
         />
         <input
@@ -110,6 +161,9 @@ const EmployeeList = () => {
       </div>
 
       <h1>ARRAY</h1>
+      <Alert show={showAlert} variant="success">
+        Employee List successfully updated!.
+      </Alert>
       {sortedEmployees?.map((item, index) => {
         return (
           <div key={index} className="border border-danger w-50 m-2 p-2">

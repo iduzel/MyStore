@@ -15,9 +15,8 @@ import GLogin from "./components/GLogin";
 const Paths = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/employee" element={<Employee />} />
-      <Route path="/employeeList" element={<EmployeeList />} />
+      <Route path="/" element={<Home />} />      
+      <Route path="/employee" element={<EmployeeList />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path='/glogin/:id' exact element={<GLogin />}/>
