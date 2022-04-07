@@ -19,7 +19,7 @@ export default function Login() {
     password: "",
   });
 
-  const { userData, setUserData } = useContext(DataContext);
+  const { employeeData, setEmployeeData, userData, setUserData } = useContext(DataContext);
 
   const handleNaviSignUp = () => {
     navigate("/register");
@@ -31,26 +31,23 @@ export default function Login() {
 
     if (!data.password) return;
     const response = await axios.post("/users/login", data);
+    
     console.log("response is: ", response);
 
     if (response.data.success) {
       console.log("login client side data SUCCESS");
       console.log("response.data.user: ", response.data.user);
-      setUserData({ ...response.data.user });
+      setUserData({ ...response.data.user });      
       navigate("/home");
     }
   };
 
-  const handleGoogle = async () => {
-    const response = await axios.get('/users/google')
-    console.log('response is:', response)
-  }
   return (
     <div className="login">
       <div className="bg-img"></div>
 
       <div className="login-main shadow-lg">
-        <form onClick={(e) => handleLogin(e)} className="form">
+        <form onSubmit={(e) => handleLogin(e)} className="form">
           <div className="logo">
             <img
               className="logo-image"
@@ -104,6 +101,7 @@ export default function Login() {
           <Link className="forgot" to='/forgotpassword'> <div >
             <small>Forgot Password</small>
           </div></Link>
+          <a className="google-login-link" href="/users/google"><img  src={google_logo} alt=""  /></a> 
           
           <div className="no-account">
             <small>
@@ -112,80 +110,10 @@ export default function Login() {
             </small>
           </div>
         </form>
-        <a href="/users/google"><img  src={google_logo} alt=""  /></a> 
+        
         <div className="side"></div>
       </div>
     </div>
   );
 }
 
-/* 
-<div className="login ">className=""
-      <div className="bg-img"></div>
-
-      <div className="login-main shadow-lg">
-        <form onClick={(e) => handleLogin(e)} className="form">
-          <div className="logo">
-            <img
-              className="logo-image"
-              src="https://media.istockphoto.com/photos/leaf-symbol-green-black-picture-id693694672?b=1&k=20&m=693694672&s=170667a&w=0&h=_B5pyXi5TjexGcH6FbN2IiJy2Qa6fKqs-2KG0gb5Zy8="
-              alt="logo"
-            />
-          </div>
-          <h3 className="title">SIGN IN</h3>
-          
-          <input
-            value={data.username}
-            onChange={(e) => setData({ ...data, username: e.target.value })}
-            className="input input-user"
-            type="text"
-            placeholder={userPH}
-            onFocus={() => setUserPH("")}
-            onBlur={() => setUserPH("  Username")}
-          />
-          <input
-            value={data.email}
-            onChange={(e) => setData({ ...data, email: e.target.value })}
-            className="input input-user"
-            type="email"
-            placeholder={emailPH}
-            onFocus={() => setEmailPH("")}
-            onBlur={() => setEmailPH("  Email")}
-          />
-          <input
-            value={data.password}
-            onChange={(e) => setData({ ...data, password: e.target.value })}
-            className="input input-email"
-            type="password"
-            placeholder={passwordPH}
-            onFocus={() => setPaswrdPH("")}
-            onBlur={() => setPaswrdPH("  Password")}
-          />
-          <div className="checkbox-div">
-            <input
-              className=" input-checkbox"
-              htmlFor="check-remember"
-              type="checkbox"
-            />
-            <label className="checkbox-label" id="check-remember">
-              Remember me
-            </label>
-          </div>
-
-          <button className="login-button" type="submit">
-            Sign In
-          </button>
-          <Link to='/forgotpassword'> <div className="forgot">
-            <small>Forgot Password</small>
-          </div></Link>
-          <div className="no-account">
-            <small>
-              Don't have an account ?{" "}
-              <span onClick={handleNaviSignUp}>Sign Up</span>
-            </small>
-          </div>
-        </form>
-        <div className="side"></div>
-      </div>
-    </div>
-  ); */

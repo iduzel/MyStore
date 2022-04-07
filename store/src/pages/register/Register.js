@@ -45,7 +45,7 @@ export default function Register() {
     <div className="register">
       <div className="bg-img"></div>
 
-      <div className="register-main">
+      <div className="register-main shadow-lg">
         <div className="side"></div>
         <form onSubmit={(e) => handleSubmit(e)} className="form">
           <div className="logo">
@@ -103,13 +103,11 @@ export default function Register() {
             </label>
           </div>
 
-          <button className="login-button" type="submit">
+          <button className="signup-button" type="submit">
             Sign Up
           </button>
-          <div className="forgot">
-            <small>Forgot Password</small>
-          </div>
-          <div className="no-account">
+          
+          <div className="have-account">
             <small>
               Already have an account !{" "}
               <span onClick={handleNaviSignIn}>Sign In</span>
