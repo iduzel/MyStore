@@ -4,8 +4,8 @@ import { Button, Form } from "react-bootstrap";
 import { DataContext } from "../../pages/context/Context";
 import "./Employee.scss";
 
-const AddEmployee = (props) => {
-  const { employeeData, setEmployeeData } = useContext(DataContext);
+const AddEmployee = () => {
+  const { flag, setFlag, employeeData, setEmployeeData } = useContext(DataContext);
   const [newEmployee, setNewEmployee] = useState({
     name: "",
     email: "",
@@ -29,6 +29,7 @@ const AddEmployee = (props) => {
     if (response.data.success) {
       console.log("add response is success");
       setEmployeeData([...employeeData, newEmployee]);
+      
     }
     setNewEmployee({
       name: "",
@@ -40,7 +41,8 @@ const AddEmployee = (props) => {
       date: "",
     });
 
-    props.setFlag(!props.flag);
+    setFlag(!flag)
+  
   };
 
   return (
@@ -89,9 +91,9 @@ const AddEmployee = (props) => {
       </Form.Group>
       <Form.Group>
         <Form.Select  name="department"
-          value={department}
+          /* value={department} */
           onChange={(e) => onInputChange(e)} aria-label="Default select example">
-          <option>Department</option>
+          <option value="">Department</option>
           <option value="JS">JS</option>
           <option value="Java">Java</option>
           <option value="React">React</option>

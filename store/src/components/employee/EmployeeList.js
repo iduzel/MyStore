@@ -9,24 +9,45 @@ import AddEmployee from "./AddEmployee";
 
 const EmployeeList = () => {
   const navigate = useNavigate();
-  const [flag, setFlag] = useState();
+  const [dep, setDep] = useState("");
 
-  const { userData, setUserData, employeeData, setEmployeeData } =
-    useContext(DataContext);
+  const {
+    flag,
+    setFlag,
+    userData,
+    setUserData,
+    employeeData,
+    setEmployeeData,
+  } = useContext(DataContext);
 
   useEffect(() => {
     if (!userData) navigate("/login");
+    console.log("FLAG CHANGED");
     const getData = async () => {
       const response = await axios.get("/employees/list");
       console.log("DATA EMP RESPONSE: ", response);
-      setEmployeeData([...response.data]);
+
+      if (dep === "") {
+        console.log("empty dep");
+        setEmployeeData([
+          ...response.data.sort((a, b) =>
+            a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
+          ),
+        ]);
+      } else {
+        console.log("full dep");
+        setEmployeeData([
+          ...response.data
+            .filter((item) => item?.department === dep)
+            .sort((a, b) =>
+              a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
+            ),
+        ]);
+      }
     };
+
     getData();
   }, [flag]);
-
-  const sortedEmployees = employeeData?.sort((a, b) =>
-    a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1
-  );
 
   const [showAlert, setShowAlert] = useState(false);
   const [show, setShow] = useState(false);
@@ -48,16 +69,16 @@ const EmployeeList = () => {
     };
   }, [employeeData]);
 
-   
   const getSearch = (e) => {
     const searchElement = e.target.value;
-    console.log('getSearch: ', e.target.value);
-   
+    console.log("getSearch: ", searchElement);
+  };
 
- 
-
-    
-  }
+  //handle SELECT
+  const handleSelect = (e) => {
+    setDep(e.target.value);
+    setFlag(!flag);
+  };
 
   return (
     <div className="employeeList container mt-2">
@@ -71,9 +92,9 @@ const EmployeeList = () => {
         ></iframe>
       </div> */}
 
-      <Alert show={showAlert} variant="success">
+      {/*    <Alert show={showAlert} variant="success">
         Employee List successfully updated!.
-      </Alert>
+      </Alert> */}
 
       <div className="table-title mt-5">
         <div className="row">
@@ -84,9 +105,10 @@ const EmployeeList = () => {
           </div>
           <div className="col-sm-4 ">
             <input
-            className="ps-1"
-            placeholder="Search"            
-            onChange={(e) => getSearch(e)}  />
+              className="ps-1"
+              placeholder="Search"
+              onChange={(e) => getSearch(e)}
+            />
           </div>
           <div className="col-sm-4">
             <Button
@@ -108,18 +130,29 @@ const EmployeeList = () => {
             <th>Email</th>
             <th>Address</th>
             <th>Phone</th>
-            <th>Department</th>
+            <th>
+              <Form.Group>
+                <Form.Select
+                  onChange={handleSelect}
+                  name="department"
+                  aria-label="Default select example"
+                >
+                  <option value="">Department</option>
+                  <option value="JS">JS</option>
+                  <option value="Java">Java</option>
+                  <option value="React">React</option>
+                </Form.Select>
+              </Form.Group>
+            </th>
             <th>Date</th>
-           {/*  <th>ID</th> */}
+            {/*  <th>ID</th> */}
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {sortedEmployees?.map((employee, index) => (
-            <tr key={index}>
-              <Employee employee={employee}
-                        flag={flag}
-                        setFlag={setFlag} />
+          {employeeData?.map((employee) => (
+            <tr key={employee._id}>
+              <Employee employee={employee} />
             </tr>
           ))}
         </tbody>
@@ -130,8 +163,7 @@ const EmployeeList = () => {
           <Modal.Title>Add Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddEmployee flag={flag}
-          setFlag={setFlag} />
+          <AddEmployee />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -139,7 +171,6 @@ const EmployeeList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 };
