@@ -7,9 +7,9 @@ import EditEmployee from './EditEmployee';
 
 
 
-const Employee = ({flag, setFlag, employee}) => {
+const Employee = ({employee}) => {
 
-  const { employeeData, setEmployeeData } = useContext(DataContext); 
+  const { flag, setFlag, employeeData, setEmployeeData } = useContext(DataContext); 
 
     const [show, setShow] = useState(false)
     const handleClose = () => setShow(false);
@@ -32,7 +32,10 @@ const Employee = ({flag, setFlag, employee}) => {
     if (response.data.success) {
       console.log("delete response is success ");
       setEmployeeData(employeeData.filter((item) => item._id !== id));
+      
     }
+    setFlag(!flag)
+    
   };
 
     return (

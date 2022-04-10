@@ -5,11 +5,11 @@ import "./Employee.scss";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
-const EditEmployee = ({ flag, setFlag, theEmployee }) => {
+const EditEmployee = ({theEmployee }) => {
   const navigate = useNavigate();
   const employee = theEmployee;
 
-  const { updateEmployee, employeeData, setEmployeeData, userData } =
+  const { flag, setFlag, updateEmployee, employeeData, setEmployeeData, userData } =
     useContext(DataContext);
 
   //handle edit
