@@ -21,7 +21,7 @@ const EmployeeList = () => {
   } = useContext(DataContext);
 
   useEffect(() => {
-    if (!userData) navigate("/login");
+   
     console.log("FLAG CHANGED");
     const getData = async () => {
       const response = await axios.get("/employees/list");
@@ -82,15 +82,7 @@ const EmployeeList = () => {
 
   return (
     <div className="employeeList container mt-2">
-      {/* <div className="video-container mt-3">
-        <iframe          
-          src="https://www.youtube.com/embed/8C8ISYGD0ns"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div> */}
+     
 
       {/*    <Alert show={showAlert} variant="success">
         Employee List successfully updated!.
@@ -110,7 +102,7 @@ const EmployeeList = () => {
               onChange={(e) => getSearch(e)}
             />
           </div>
-          <div className="col-sm-4">
+          <div className={(userData) ? "col-sm-4 show" : "hide"}>
             <Button
               onClick={handleShow}
               className="btn btn-success text-white"

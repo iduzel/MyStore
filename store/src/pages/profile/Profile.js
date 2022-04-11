@@ -8,47 +8,45 @@ import { Link, useNavigate } from "react-router-dom";
 const Profile = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(DataContext);
+  const [data, setData] = useState();
 
   console.log("userDataContext: ", userData);
-  const [ flag, setFlag ] = useState(false)
-    // actual date
-    const [date, setDate] = useState({
-      actualYear: new Date().getFullYear(),
-      actualMonth: new Date().getMonth() + 1,
-      actualDay: new Date().getDate(),
-    });
-  
-    // user date
-    const [myDate, setMyDate] = useState({
-      
-      year: (userData.birthDate) ?  Number(userData.birthDate.substring(0, 4)) : null,
-      month: (userData.birthDate) ? Number(userData.birthDate.substring(5, 7)) : null ,
-      day: (userData.birthDate) ? Number(userData.birthDate.substring(8)) : null ,
-    });
-  
-
-  const [userAge, setUserAge] = useState(
-    (date.actualMonth >= myDate.month) ? date.actualYear - myDate.year 
-    : (date.actualYear - myDate.year)-1
-  );
-
-
-  // DATA
-  const [data, setData] = useState({
-    firstName: "",
-    lastName: "",
-    age: null,
-    address: "",
-    phone: null,
-    birthDate: "",
+  const [flag, setFlag] = useState(false);
+  // actual date
+  const [date, setDate] = useState({
+    actualYear: new Date().getFullYear(),
+    actualMonth: new Date().getMonth() + 1,
+    actualDay: new Date().getDate(),
   });
 
+  // user date
+  const [myDate, setMyDate] = useState({
+    year: userData?.birthDate
+      ? Number(userData.birthDate.substring(0, 4))
+      : null,
+    month: userData?.birthDate
+      ? Number(userData.birthDate.substring(5, 7))
+      : null,
+    day: userData?.birthDate ? Number(userData.birthDate.substring(8)) : null,
+  });
+
+  const [userAge, setUserAge] = useState(
+    date.actualMonth >= myDate.month
+      ? date.actualYear - myDate.year
+      : date.actualYear - myDate.year - 1
+  );
+
+  // IMAGE AND AGE
   useEffect(() => {
-    setData({ ...data, ...userData, age:userAge });
+    setData({ ...data, ...userData, age: userAge });
     setFileUrl(userData.image);
   }, []);
 
+  // DATA
 
+  const handleDataChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   const [fileUrl, setFileUrl] = useState("");
   const [blobFile, setBlobFile] = useState(null);
@@ -87,10 +85,8 @@ const Profile = () => {
 
     if (response.data.success) setUserData({ ...response.data.user });
 
-
-    setFlag(!flag)
-    navigate('/')
-  
+    setFlag(!flag);
+    navigate("/");
   };
 
   return (
@@ -98,53 +94,71 @@ const Profile = () => {
       {/*  SHOW PROFILE */}
 
       <h1 className="m-5">PROFILE</h1>
-      <div className={(!flag) ? "profile shadow-lg container rounded mt-5 show" : "profile shadow-lg container rounded mt-5 hide"  } >
-
+      <div
+        className={
+          !flag
+            ? "profile shadow-lg container rounded mt-5 show"
+            : "profile shadow-lg container rounded mt-5 hide"
+        }
+      >
         <div className="wholeProfile p-5">
           <div className="profile-texts">
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Name</h6>
               <h4 className="text-dark">
-                {data.firstName + " " + data.lastName}
+                {data?.firstName + " " + data?.lastName}
               </h4>
             </div>
 
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Username</h6>
-              <h4 className="text-dark">{data.username}</h4>
+              <h4 className="text-dark">{data?.username}</h4>
             </div>
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Email</h6>
-              <h4 className="text-dark">{data.email}</h4>
+              <h4 className="text-dark">{data?.email}</h4>
             </div>
 
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Phone</h6>
-              <h4 className="text-dark">{data.phone}</h4>
+              <h4 className="text-dark">{data?.phone}</h4>
             </div>
 
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Address</h6>
-              <h4 className="text-dark">{data.address}</h4>
+              <h4 className="text-dark">{data?.address}</h4>
             </div>
 
             <div className="single-info shadow-lg rounded">
               <h6 className="text-danger">Age</h6>
-              <h4 className="text-dark">{data.age}</h4>
+              <h4 className="text-dark">{data?.age}</h4>
             </div>
           </div>
           <div className="profile-image rounded">
-            <img className="rounded" src={data.image} alt="" />
+            <img className="rounded" src={data?.image} alt="" />
           </div>
         </div>
         <div>
-        <button onClick={() => setFlag(!flag)}  className="btn btn-danger w-100 mb-1">EDIT YOUR PROFILE</button>
-        <Link to="/home" className="btn btn-info w-100">HOMEPAGE</Link>
+          <button
+            onClick={() => setFlag(!flag)}
+            className="btn btn-danger w-100 mb-1"
+          >
+            EDIT YOUR PROFILE
+          </button>
+          <Link to="/home" className="btn btn-info w-100">
+            HOMEPAGE
+          </Link>
         </div>
       </div>
 
       {/*  EDIT PROFILE */}
-      <div className={(!flag) ? "profile container shadow-lg hide" : "profile container shadow-lg show" }      >
+      <div
+        className={
+          !flag
+            ? "profile container shadow-lg hide"
+            : "profile container shadow-lg show"
+        }
+      >
         <h2>Profile</h2>
         <Row className="">
           <Col className="">
@@ -153,10 +167,12 @@ const Profile = () => {
               <div className="form">
                 {/* USERNAME */}
                 <input
+                  name="username"
                   id="username"
                   className="form__input"
                   readOnly
-                  value={data.username}
+                  value={data?.username}
+                  onChange={(e) => handleDataChange(e)}
                 />
                 <label htmlFor="username" className="form__label">
                   Username{" "}
@@ -166,10 +182,12 @@ const Profile = () => {
               <div className="form">
                 {/* EMAIL */}
                 <input
+                  name="email"
                   id="email"
                   className="form__input"
                   readOnly
-                  value={data.email}
+                  value={data?.email}
+                  onChange={(e) => handleDataChange(e)}
                 />
                 <label className="form__label" htmlFor="email">
                   Email{" "}
@@ -179,11 +197,10 @@ const Profile = () => {
               <div className="form">
                 {/* FIRSTNAME */}
                 <input
+                  name="firstName"
                   id="firstname"
                   className="form__input"
-                  onChange={(e) =>
-                    setData({ ...data, firstName: e.target.value })
-                  }
+                  onChange={(e) => handleDataChange(e)}
                   value={data?.firstName}
                 />
                 <label className="form__label" htmlFor="firstname">
@@ -194,11 +211,10 @@ const Profile = () => {
               <div className="form">
                 {/* LASTNAME */}
                 <input
+                  name="lastName"
                   id="lastname"
                   className="form__input"
-                  onChange={(e) =>
-                    setData({ ...data, lastName: e.target.value })
-                  }
+                  onChange={(e) => handleDataChange(e)}
                   value={data?.lastName}
                 />
                 <label className="form__label" htmlFor="lastname">
@@ -209,11 +225,10 @@ const Profile = () => {
               <div className="form">
                 {/* ADDRESS */}
                 <input
+                  name="address"
                   id="address"
                   className=" form__input"
-                  onChange={(e) =>
-                    setData({ ...data, address: e.target.value })
-                  }
+                  onChange={(e) => handleDataChange(e)}
                   value={data?.address}
                 />
                 <label className="form__label" htmlFor="address">
@@ -224,9 +239,10 @@ const Profile = () => {
               <div className="form">
                 {/* PHONE */}
                 <input
+                  name="phone"
                   id="phone"
                   className=" form__input"
-                  onChange={(e) => setData({ ...data, phone: e.target.value })}
+                  onChange={(e) => handleDataChange(e)}
                   value={data?.phone}
                 />
                 <label htmlFor="phone" className="form__label">
@@ -237,12 +253,11 @@ const Profile = () => {
               <div className="form">
                 {/* BIRTHDATE */}
                 <input
+                  name="birthDate"
                   type="date"
                   id="birthDate"
                   className=" form__input"
-                  onChange={(e) =>
-                    setData({ ...data, birthDate: e.target.value })
-                  }
+                  onChange={(e) => handleDataChange(e)}
                   value={data?.birthDate}
                 />
                 <label htmlFor="birthDate" className="form__label">
