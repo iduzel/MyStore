@@ -4,6 +4,7 @@ import axios from "axios";
 import { DataContext} from '../../pages/context/Context';
 import { Button, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditEmployee from './EditEmployee';
+import moment from 'moment';
 
 
 
@@ -46,7 +47,7 @@ const Employee = ({employee}) => {
             <td>{employee.address}</td>
             <td>{employee.phone}</td>
             <td>{employee.department}</td>
-            <td>{employee.date}</td>
+            <td>{moment(employee.date).format('MMM DD YYYY') }</td>
             {/* <td>{employee._id}</td> */}
             <td>
                 <OverlayTrigger
