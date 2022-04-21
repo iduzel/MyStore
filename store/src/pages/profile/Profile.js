@@ -9,6 +9,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(DataContext);
   const [data, setData] = useState();
+  const [fileUrl, setFileUrl] = useState("");
+  const [blobFile, setBlobFile] = useState(null);
 
   console.log("userDataContext: ", userData);
   const [flag, setFlag] = useState(false);
@@ -46,11 +48,9 @@ const Profile = () => {
 
   const handleDataChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-  };
+  }; 
 
-  const [fileUrl, setFileUrl] = useState("");
-  const [blobFile, setBlobFile] = useState(null);
-
+  // IMAGE
   const handleImageChange = (e) => {
     console.log("File is", e.currentTarget.files[0]);
     // console.log('File is', e.target.files[0])
@@ -62,6 +62,7 @@ const Profile = () => {
     setBlobFile(e.currentTarget.files[0]);
   };
 
+  // SAVE
   const handleSave = async () => {
     console.log("data is ", data);
 
@@ -74,7 +75,7 @@ const Profile = () => {
     if (blobFile) formdata.set("image", blobFile, "profile_image");
 
     const config = {
-      headers: { "content-type": "mulitpart/form-data" },
+      headers: { "content-type": "multipart/form-data" },
     };
 
     console.log("Handlesave: formdata is", formdata.keys());
