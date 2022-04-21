@@ -9,15 +9,24 @@ import EmailConfirm from "./components/email/EmailConfirm";
 import ForgotPass from "./pages/forgotPass/ForgotPass";
 import ChangePass from "./pages/changePass/ChangePass";
 import EmployeeList from "./components/employee/EmployeeList";
-import Employee from "./components/employee/Employee";
 import GLogin from "./components/GLogin";
+import Admin from "./pages/admin/Admin";
+import Categories from './pages/admin/Categories'
+import Posts from "./components/posts/Posts";
+
+import BlogSingle from "./components/posts/BlogSingle";
+import AddPost from "./components/posts/AddPost";
 
 const Paths = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />      
       <Route path="/employee" element={<EmployeeList />} />
-      <Route path="/home" element={<Home />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/:category" element={<Categories />} />
+     
+      <Route path="/blogsingle" element={<BlogSingle />} />
+      <Route path="/posts" element={<Posts />} />      
       <Route path="/login" element={<Login />} />
       <Route path='/glogin/:id' exact element={<GLogin />}/>
       <Route path="/register" element={<Register />} />
