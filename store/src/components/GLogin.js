@@ -25,7 +25,7 @@ export default function GLogin () {
                 // add userdata to context
                 setUserData({...response.data.user})
                 // redirect to home
-                navigate('/home')
+                navigate('/')
             }
         }
 
