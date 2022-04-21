@@ -1,12 +1,25 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect } from "react";
+import { DataContext } from "../context/Context";
 import "./Home.scss";
-import { Link, useNavigate } from "react-router-dom";
+
 
 const Home = () => {
+  const { categoryData, setCategoryData } = useContext(DataContext);
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get('/admin/categories/list');
+      console.log('RESPONSE GET DATA : ', response)
+
+      setCategoryData(response.data)
+     
+    }
+    getData()
+  }, [])
   return (
     <div className="home">
       <h1>Home Home Sweet Home</h1>
-      <Link to="/employee">EMPLOYEES</Link>
+      
        <div className="video-container m-3">
         <iframe          
           src="https://www.youtube.com/embed/8C8ISYGD0ns"

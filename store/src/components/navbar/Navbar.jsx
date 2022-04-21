@@ -28,10 +28,19 @@ const Navbar = () => {
     <div className="navbar-comp">
       <nav className="navbar navbar-light bg-dark">
         <div className="container">
-          <div>
+          <div className="navbar-left">
             {" "}
-            <Link to="/home" className="navbar-brand logo">
+            <Link to="/" className="navbar-brand logo">
               <img src={logo} alt="" width="40" height="40" />
+            </Link>
+            <Link to="/employee" className="links emp-Link">
+                Employees
+            </Link>
+            <Link to="/admin" className="links admin-Link">
+                Admin
+            </Link>
+            <Link to="/posts" className="links admin-Link">
+                Posts
             </Link>
           </div>
           <div className="navbar-right  ">
@@ -87,7 +96,7 @@ const Navbar = () => {
                       <div className="dropdown-content">
                         <Link to="/profile">Profile</Link>
                         <Link to="/employee">Employees</Link>
-                        <Link onClick={handleLogout} to="/home">
+                        <Link onClick={handleLogout} to="/">
                           Sign Out
                         </Link>
                       </div>

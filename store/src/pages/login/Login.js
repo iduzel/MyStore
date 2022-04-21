@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { DataContext } from "../context/Context";
 import { Link } from "react-router-dom";
-import google_logo from '../../pictures/btn_google_signin_dark_focus_web.png'
+import google_logo from "../../pictures/btn_google_signin_dark_focus_web.png";
 export default function Login() {
   const navigate = useNavigate();
 
@@ -19,7 +19,8 @@ export default function Login() {
     password: "",
   });
 
-  const { employeeData, setEmployeeData, userData, setUserData } = useContext(DataContext);
+  const { employeeData, setEmployeeData, userData, setUserData } =
+    useContext(DataContext);
 
   const handleNaviSignUp = () => {
     navigate("/register");
@@ -31,14 +32,14 @@ export default function Login() {
 
     if (!data.password) return;
     const response = await axios.post("/users/login", data);
-    
+
     console.log("response is: ", response);
 
     if (response.data.success) {
       console.log("login client side data SUCCESS");
       console.log("response.data.user: ", response.data.user);
-      setUserData({ ...response.data.user });      
-      navigate("/home");
+      setUserData({ ...response.data.user });
+      navigate("/");
     }
   };
 
@@ -56,7 +57,7 @@ export default function Login() {
             />
           </div>
           <h3 className="title">SIGN IN</h3>
-          
+
           <input
             value={data.username}
             onChange={(e) => setData({ ...data, username: e.target.value })}
@@ -94,15 +95,21 @@ export default function Login() {
               Remember me
             </label>
           </div>
+          
 
           <button className="login-button" type="submit">
             Sign In
           </button>
-          <Link className="forgot" to='/forgotpassword'> <div >
-            <small>Forgot Password</small>
-          </div></Link>
-          <a className="google-login-link" href="/users/google"><img  src={google_logo} alt=""  /></a> 
-          
+          <Link className="forgot" to="/forgotpassword">
+            {" "}
+            <div>
+              <small>Forgot Password</small>
+            </div>
+          </Link>
+          <a className="google-login-link" href="/users/google">
+            <img src={google_logo} alt="" />
+          </a>
+
           <div className="no-account">
             <small>
               Don't have an account ?{" "}
@@ -110,10 +117,9 @@ export default function Login() {
             </small>
           </div>
         </form>
-        
+
         <div className="side"></div>
       </div>
     </div>
   );
 }
-

@@ -5,6 +5,20 @@
     }
   }
 
+  .navbar-left {
+
+    .links {
+      text-decoration: none;
+      color: #CBE606;
+      margin-right: 0.5em;
+
+      &:hover {
+        cursor: pointer;
+        color: orange;
+      }
+    }
+  }
+
   .navbar-right {
     background-color: #fff;
     border-radius: 5px;
