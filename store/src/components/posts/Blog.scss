@@ -115,18 +115,24 @@ BLOG SECTION
 
 /* -- posts sidebar -- */
 
-.widget-post {
+.widget-post {  
+  
     min-height: 70px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+
+    .widget-post-single {
+        height: 200px;
+    }
 }
 
 .widget-post img {
     display: block;
     float: left;
-    width: 95px;
-    height: 60px;
+    width: 150px;
+    height: 200px;
     margin-right: 10px;
-    margin-top: 5px;
+    margin-top: 0px;
+    padding-bottom: 1px;
 }
 
 .widget-post a {
@@ -202,6 +208,10 @@ span.writer {
 
 .blog .blog-meta {
     margin-bottom: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+
 }
 
 .blog .blog-meta li {

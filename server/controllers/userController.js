@@ -5,35 +5,36 @@ const multer = require("multer");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: '/users/google/callback',
-  proxy: true
-}, async (accessToken, refreshToken, profile, done) => {
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/users/google/callback",
+      proxy: true,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const email = profile._json.email;
 
-  const email = profile._json.email
+      // check if there is such a user in db
+      const user = await User.findOne({ email });
 
-  // check if there is such a user in db
-  const user = await User.findOne({email})
+      // if there is such user then return it
+      if (user) return done(null, user);
 
-  // if there is such user then return it
-  if (user) return done(null, user);
+      // create a new user to insert to the db
+      const newUser = new User({
+        username: profile.id,
+        email,
+        password: email,
+      });
 
-  // create a new user to insert to the db
-  const newUser = new User({
-      username: profile.id,
-      email,
-      password: email
-  })
+      const savedUser = await newUser.save();
 
-  const savedUser = await newUser.save();
-
-  return done(null, savedUser)
-}))
-
-
-
+      return done(null, savedUser);
+    }
+  )
+);
 
 //CLOUDINARY
 
@@ -76,7 +77,6 @@ router.get("/", (req, res) => {
 //EMAIL
 const sendEmail = require("../utils/mail/mail");
 const sendEmailResetPass = require("../utils/mail/mailResetPass");
-
 
 // REGISTER
 router.post("/register", async (req, res) => {
@@ -307,23 +307,22 @@ router.get(
     session: false,
   }),
   async (req, res) => {
-    console.log('from google callback: id is', req.user._id)
+    console.log("from google callback: id is", req.user._id);
 
     // User is the class. req.user is a new User
-    const token = await req.user.generateToken('1d')
+    const token = await req.user.generateToken("1d");
 
-    res.cookie('cookieStore', token)
+    res.cookie("cookieStore", token);
 
-    res.redirect('http://localhost:3000/glogin/' + req.user._id)
+    res.redirect("http://localhost:3000/glogin/" + req.user._id);
   }
 );
 
-router.get('/glogin/:id', async (req, res) => {
+router.get("/glogin/:id", async (req, res) => {
+  console.log("from glogin: id is", req.params.id);
 
-  console.log('from glogin: id is', req.params.id)
+  const user = await User.findById(req.params.id).select("-__v -pass");
 
-  const user = await User.findById(req.params.id).select('-__v -pass')
-
-  res.send({success: true, user})
-})
+  res.send({ success: true, user });
+});
 module.exports = router;

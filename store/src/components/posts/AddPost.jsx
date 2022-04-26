@@ -4,15 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { DataContext } from "../../pages/context/Context";
 
 const AddPost = () => {
-  const { flag, setFlag, categoryData, posts, setPosts, userData } =
+  const {flag, setFlag, categoryData, posts, setPosts, userData } =
     useContext(DataContext);
   const navigate = useNavigate();
   const [singlePost, setSinglepost] = useState();
   const [imageFile, setImageFile] = useState("");
+ 
+
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get("/posts/list");
+      console.log("getList posts is : ", response);
+
+      if (response.data.success) {
+        setPosts([...response.data.posts]);
+      }
+    };
+    getData();
+  }, []);
 
   const onChangeImageFile = (e) => {
     setImageFile(e.target.files[0]);
   };
+
+ 
+
+  console.log("imageFile: ", imageFile);
+  
 
   const onInputChange = (e) => {
     setSinglepost({ ...singlePost, [e.target.name]: e.target.value });
@@ -21,11 +40,10 @@ const AddPost = () => {
   // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     console.log("HELLO");
 
     const formData = new FormData();
-    formData.append("owner", userData._id);   
+    formData.append("owner", userData._id);
     formData.append("title", singlePost.title);
     formData.append("subtitle", singlePost.subtitle);
     formData.append("content", singlePost.content);
@@ -36,14 +54,18 @@ const AddPost = () => {
     const response = await axios.post("/posts/addpost", formData);
     console.log("response add post is : ", response);
 
-    if (response.data.success) setPosts([...posts, response.data.post]);
+    if (response.data.success) {
+      setPosts([...posts, response.data.post]);
 
-    setSinglepost({});
-    setImageFile("");
+      setSinglepost({});
+      
 
-    console.log("line 49");
-    navigate("/home");
+      console.log("line 49");
+      navigate(-1);
+    }
   };
+
+ 
   return (
     <div className="addpost container mt-5">
       <form
@@ -79,14 +101,14 @@ const AddPost = () => {
 
         <div className="form-group mb-2 w-100">
           <select
-            placeholder="Location"
+            defaultValue="abc"
             onChange={(e) => onInputChange(e)}
             className="form-select"
             name="category"
           >
             {categoryData?.map((item, index) => {
               return (
-                <option key={index} name="category">
+                <option defaultValue="abc" key={index} name="category">
                   {item.name}
                 </option>
               );
@@ -107,7 +129,10 @@ const AddPost = () => {
           />
         </div>
 
-        <button className="btn btn-primary mb-5 mt-2 w-100" type="submit">
+        <button
+          /* onClick={(e) => handleSubmit(e)} */ className="btn btn-primary mb-5 mt-2 w-100"
+          type="submit"
+        >
           ADD POST
         </button>
       </form>

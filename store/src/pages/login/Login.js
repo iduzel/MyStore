@@ -45,9 +45,9 @@ export default function Login() {
 
   return (
     <div className="login">
-      <div className="bg-img"></div>
+      {/* <div className="bg-img"></div> */}
 
-      <div className="login-main shadow-lg">
+      <div className="login-main ">
         <form onSubmit={(e) => handleLogin(e)} className="form">
           <div className="logo">
             <img
@@ -118,7 +118,7 @@ export default function Login() {
           </div>
         </form>
 
-        <div className="side"></div>
+        {/* <div className="side"></div> */}
       </div>
     </div>
   );

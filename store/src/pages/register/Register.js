@@ -43,10 +43,10 @@ export default function Register() {
 
   return (
     <div className="register">
-      <div className="bg-img"></div>
+      {/* <div className="bg-img"></div> */}
 
-      <div className="register-main shadow-lg">
-        <div className="side"></div>
+      <div className="register-main">
+       {/*  <div className="side"></div> */}
         <form onSubmit={(e) => handleSubmit(e)} className="form">
           <div className="logo">
             <img

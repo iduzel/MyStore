@@ -95,7 +95,7 @@ const Navbar = () => {
 
                       <div className="dropdown-content">
                         <Link to="/profile">Profile</Link>
-                        <Link to="/employee">Employees</Link>
+                        <Link to="/dashboard">Employees</Link>
                         <Link onClick={handleLogout} to="/">
                           Sign Out
                         </Link>
