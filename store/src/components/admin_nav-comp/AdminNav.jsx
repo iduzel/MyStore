@@ -10,7 +10,7 @@ const AdminNav = () => {
                    <Link to="/admin">Admin</Link>
                </li>
                <li className='nav-item'>
-                   <Link to="/admin/category">Categories</Link>
+                   <Link to="/admin/category">Departments</Link>
                </li>
 
            </ul>

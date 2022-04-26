@@ -9,8 +9,10 @@ const EditEmployee = ({theEmployee }) => {
   const navigate = useNavigate();
   const employee = theEmployee;
 
-  const { flag, setFlag, updateEmployee, employeeData, setEmployeeData, userData } =
+  const { flag, setFlag,categoryData, updateEmployee, employeeData, setEmployeeData, userData } =
     useContext(DataContext);
+   const [imageFile, setImageFile] = useState(employee.image); 
+
 
   //handle edit
   const [editData, setEditData] = useState({
@@ -20,8 +22,17 @@ const EditEmployee = ({theEmployee }) => {
     phone: employee.phone,
     department: employee.department,
     date: employee.date,
+    image: employee.image,
+    role: employee.role
   });
   console.log("editData is: ", editData);
+
+  
+
+  const onChangeImageFile = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
 
   const onInputChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
@@ -34,9 +45,19 @@ const EditEmployee = ({theEmployee }) => {
   const handleSubmitModal = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("name", editData.name);
+    formData.append("email", editData.email);
+    formData.append("address", editData.address);
+    formData.append("phone", editData.phone);
+    formData.append("department", editData.department);   
+    formData.append("tags", editData.tags);
+    formData.append("image", imageFile);
+    formData.append("role", editData.role)
+
     const response = await axios.put(
       `/employees/edit/${employee._id}`,
-      editData
+      formData
     );
 
     if (response.data.success) {
@@ -59,6 +80,17 @@ const EditEmployee = ({theEmployee }) => {
           placeholder="Name *"
           name="name"
           value={editData.name}
+          onChange={(e) => onInputChange(e)}
+          required
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <Form.Control
+          type="text"
+          placeholder="Role"
+          name="role"
+          value={ editData.role }
           onChange={(e) => onInputChange(e)}
           required
         />
@@ -96,16 +128,20 @@ const EditEmployee = ({theEmployee }) => {
         />
       </Form.Group>
 
-        <Form.Group>
-        <Form.Select  name="department"
-          value={editData.department}
-          onChange={(e) => onInputChange(e)} aria-label="Default select example">
-          <option>Department</option>
-          <option value="JS">JS</option>
-          <option value="Java">Java</option>
-          <option value="React">React</option>
+      <Form.Group>
+        <Form.Select
+          name="department"
+          /* value={department} */
+          onChange={(e) => onInputChange(e)}
+          aria-label="Default select example"
+        >
+          <option>Select Department</option>
+
+          {categoryData?.map((category, index) => {
+            return <option value={category.name}>{category.name}</option>;
+          })}
         </Form.Select>
-        </Form.Group>
+      </Form.Group>
      
       <Form.Group>
         <Form.Control
@@ -114,6 +150,17 @@ const EditEmployee = ({theEmployee }) => {
           name="date"
           value={editData.date}
           onChange={(e) => onInputChange(e)}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Control
+          accept="image/*"
+          className="form-control w-100"
+          filename="image"
+          name="image"
+          type="file"
+          id="file"          
+          onChange={onChangeImageFile}
         />
       </Form.Group>
 

@@ -13,20 +13,26 @@ import GLogin from "./components/GLogin";
 import Admin from "./pages/admin/Admin";
 import Categories from './pages/admin/Categories'
 import Posts from "./components/posts/Posts";
-
 import BlogSingle from "./components/posts/BlogSingle";
 import AddPost from "./components/posts/AddPost";
+import EmployeeDashboard from "./components/employee/EmployeeDashboard";
+import EmployeeAdmins from "./components/employee/EmployeeAdmins";
+import EmployeeDetails from "./components/employee/EmployeeDetails";
+
 
 const Paths = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />      
       <Route path="/employee" element={<EmployeeList />} />
+      <Route path="/employee/:detail" element={<EmployeeDetails />} />
+      <Route path="/employeeAdmin" element={<EmployeeAdmins />} />
+      <Route path="/dashboard" element={<EmployeeDashboard />} />
       <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/:category" element={<Categories />} />
-     
+      <Route path="/admin/:category" element={<Categories />} />     
       <Route path="/blogsingle" element={<BlogSingle />} />
-      <Route path="/posts" element={<Posts />} />      
+      <Route path="/posts" element={<Posts />} />  
+      <Route path="/posts/:addpost" element={<AddPost />} />      
       <Route path="/login" element={<Login />} />
       <Route path='/glogin/:id' exact element={<GLogin />}/>
       <Route path="/register" element={<Register />} />

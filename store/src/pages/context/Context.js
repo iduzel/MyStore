@@ -10,6 +10,8 @@ export default function DataProvider({ children }) {
   const [categoryData, setCategoryData] = useState([]);
   const [posts, setPosts] = useState([]);
   const [singlePost, setSinglePost] = useState({});
+  const [fileUrl, setFileUrl] = useState("");
+  const [employeeDetail, setEmployeeDetail] = useState({});
 
   /*   const updateEmployee = (id, updatedEmployee) => {
     setEmployeeData(
@@ -34,6 +36,10 @@ export default function DataProvider({ children }) {
         setPosts,
         singlePost,
         setSinglePost,
+        fileUrl,
+        setFileUrl,
+        employeeDetail,
+        setEmployeeDetail,
       }}
     >
       {children}

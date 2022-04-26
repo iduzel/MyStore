@@ -73,7 +73,7 @@ const Categories = () => {
                   required
                 />
                 <button className="btn btn-warning mt-3 " type="submit">
-                  Add Category
+                  Add Department
                 </button>
               </div>
             </form>

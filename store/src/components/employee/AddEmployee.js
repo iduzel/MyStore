@@ -5,7 +5,8 @@ import { DataContext } from "../../pages/context/Context";
 import "./Employee.scss";
 
 const AddEmployee = () => {
-  const { flag, setFlag, employeeData, setEmployeeData } = useContext(DataContext);
+  const { categoryData, flag, setFlag, employeeData, setEmployeeData } =
+    useContext(DataContext);
   const [newEmployee, setNewEmployee] = useState({
     name: "",
     email: "",
@@ -13,9 +14,16 @@ const AddEmployee = () => {
     phone: null,
     department: "",
     date: null,
+    role: ""
   });
 
-  const { name, email, address, phone, department, date } = newEmployee;
+  const [imageFile, setImageFile] = useState("");
+
+  const { name, email, address, phone, department, date, role } = newEmployee;
+
+  const onChangeImageFile = (e) => {
+    setImageFile(e.target.files[0]);
+  };
 
   const onInputChange = (e) => {
     setNewEmployee({ ...newEmployee, [e.target.name]: e.target.value });
@@ -24,12 +32,22 @@ const AddEmployee = () => {
   // HANDLE SUBMIT - ADD EMPLOYEE
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/employees/add", newEmployee);
+
+    const formData = new FormData();
+    formData.append("name", newEmployee.name);
+    formData.append("email", newEmployee.email);
+    formData.append("address", newEmployee.address);
+    formData.append("phone", newEmployee.phone);
+    formData.append("department", newEmployee.department);
+    formData.append("tags", newEmployee.tags);
+    formData.append("image", imageFile);
+    formData.append("role", newEmployee.role)
+
+    const response = await axios.post("/employees/add", formData);
 
     if (response.data.success) {
       console.log("add response is success");
       setEmployeeData([...employeeData, newEmployee]);
-      
     }
     setNewEmployee({
       name: "",
@@ -39,10 +57,10 @@ const AddEmployee = () => {
       department: "",
       tags: [],
       date: "",
+      role:""
     });
 
-    setFlag(!flag)
-  
+    setFlag(!flag);
   };
 
   return (
@@ -53,6 +71,17 @@ const AddEmployee = () => {
           placeholder="Name *"
           name="name"
           value={name}
+          onChange={(e) => onInputChange(e)}
+          required
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <Form.Control
+          type="text"
+          placeholder="Role"
+          name="role"
+          value={role}
           onChange={(e) => onInputChange(e)}
           required
         />
@@ -90,15 +119,18 @@ const AddEmployee = () => {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Select  name="department"
+        <Form.Select
+          name="department"
           /* value={department} */
-          onChange={(e) => onInputChange(e)} aria-label="Default select example">
-          <option value="">Department</option>
-          <option value="JS">JS</option>
-          <option value="Java">Java</option>
-          <option value="React">React</option>
+          onChange={(e) => onInputChange(e)}
+          aria-label="Default select example"
+        >
+          <option>Select Department</option>
+
+          {categoryData?.map((category, index) => {
+            return <option value={category.name}>{category.name}</option>;
+          })}
         </Form.Select>
-       
       </Form.Group>
 
       <Form.Group>
@@ -108,6 +140,18 @@ const AddEmployee = () => {
           name="date"
           value={date}
           onChange={(e) => onInputChange(e)}
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <Form.Control
+          accept="image/*"
+          className="form-control w-100"
+          filename="image"
+          name="image"
+          type="file"
+          id="file"
+          onChange={onChangeImageFile}
         />
       </Form.Group>
 
