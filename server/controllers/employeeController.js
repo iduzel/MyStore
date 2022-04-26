@@ -1,6 +1,40 @@
 const express = require("express");
 const Employee = require("../models/EmployeeModel");
 const router = express.Router();
+const multer = require("multer");
+
+//CLOUDINARY
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storageCloudinary = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "Store",
+    format: async (req, file) => {
+      let extension = "";
+
+      if (file.mimetype.includes("image")) {
+        extension = file.mimetype.slice(6);
+
+        if (extension === "jpeg") extension = "jpg";
+      }
+
+      return extension;
+    },
+    public_id: (req, file) =>
+      `${req.body._id}-${Date.now()}-${file.originalname}`,
+  },
+});
+
+const uploadCloudinary = multer({ storage: storageCloudinary });
 
 router.get("/list", async (req, res) => {
   try {
@@ -13,7 +47,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", uploadCloudinary.single("image"), async (req, res) => {
   try {
     console.log("employeeController/register req body is: ", req.body);
 
@@ -21,6 +55,7 @@ router.post("/add", async (req, res) => {
 
     if (!name || !email) return res.send({ success: false, errorId: 1 });
 
+    if (req.file) req.body.image = req.file.path;
     const newEmployee = new Employee(req.body);
     console.log("newEmployee: ", newEmployee);
     const employee = await newEmployee.save();
@@ -51,12 +86,14 @@ router.delete('/delete/:employeeid', async (req, res) => {
   }
 })
 
-router.put('/edit/:employeeid', async (req, res) => {
+router.put('/edit/:employeeid', uploadCloudinary.single("image"), async (req, res) => {
 
   try {
     console.log('req.params is: ',req.params)
    
     console.log('req body is', req.body);
+    
+    if (req.file) req.body.image = req.file.path;
     const { employeeid } = req.params
     console.log('employee EDIT ID: ', employeeid)
 
@@ -67,7 +104,9 @@ router.put('/edit/:employeeid', async (req, res) => {
       phone: req.body.phone,
       department: req.body.department,
       date: req.body.date,
-      tags: req.body.tags
+      tags: req.body.tags,
+      image: req.body.image,
+      role: req.body.role
     })
 
     res.send({success: true, employee})
