@@ -2,7 +2,7 @@
   "name": "store",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "homepage": "https://iduzel.github.io/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
