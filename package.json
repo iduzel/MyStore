@@ -9,7 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server/server.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-prebuild": "npm install && cd client && npm install && cd ../ && cd server && npm install",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
