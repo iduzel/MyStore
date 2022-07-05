@@ -1,4 +1,6 @@
 .home {
+  display: flex;
+  flex-direction: column;
     h1 {
         text-align: center;
         margin: 30px 0;

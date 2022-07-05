@@ -28,8 +28,7 @@ const Home = () => {
     getData();
   }, []);
   return (
-    <div className="home container">
-     
+    <div className="home container ">
       <h1>Home Home Sweet Home</h1>
 
       <section className="sections">
