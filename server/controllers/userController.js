@@ -314,7 +314,7 @@ router.get(
 
     res.cookie("cookieStore", token);
 
-    res.redirect("http://localhost:3000/glogin/" + req.user._id);
+    res.redirect((process.env.NODE_ENV === "production" ? "https://storeduzel.herokuapp.com/glogin/" : "http://localhost:3000/glogin/") + req.user._id);
   }
 );
 
