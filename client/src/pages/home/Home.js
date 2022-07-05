@@ -29,6 +29,7 @@ const Home = () => {
   }, []);
   return (
     <div className="home container">
+     
       <h1>Home Home Sweet Home</h1>
 
       <section className="sections">
@@ -37,18 +38,18 @@ const Home = () => {
           <iframe
             src="https://www.youtube.com/embed/pWbMrx5rVBE"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
         </div>
         <div className="videos">
           <iframe
             src="https://www.youtube.com/embed/ofme2o29ngU"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
         </div>
       </section>
@@ -58,18 +59,18 @@ const Home = () => {
           <iframe
             src="https://www.youtube.com/embed/w7ejDZ8SWv8"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
         </div>
         <div className="videos">
           <iframe
             src="https://www.youtube.com/embed/ofme2o29ngU"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
         </div>
       </section>

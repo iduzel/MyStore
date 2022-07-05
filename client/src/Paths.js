@@ -18,6 +18,7 @@ import AddPost from "./components/posts/AddPost";
 import EmployeeDashboard from "./components/employee/EmployeeDashboard";
 import EmployeeAdmins from "./components/employee/EmployeeAdmins";
 import EmployeeDetails from "./components/employee/EmployeeDetails";
+import App from "./todo/App";
 
 
 const Paths = () => {
@@ -32,6 +33,7 @@ const Paths = () => {
       <Route path="/admin/:category" element={<Categories />} />     
       <Route path="/blogsingle" element={<BlogSingle />} />
       <Route path="/posts" element={<Posts />} />  
+      <Route path="/todo" element={<App />} />  
       <Route path="/posts/:addpost" element={<AddPost />} />      
       <Route path="/login" element={<Login />} />
       <Route path='/glogin/:id' exact element={<GLogin />}/>

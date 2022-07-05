@@ -42,6 +42,9 @@ const Navbar = () => {
             <Link to="/posts" className="links admin-Link">
                 Posts
             </Link>
+            <Link to="/todo" className="links admin-Link">
+                ToDos
+            </Link>
           </div>
           <div className="navbar-right  ">
             <nav className="navbar navbar-expand-lg ">
